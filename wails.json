@@ -1,0 +1,12 @@
+{
+  "name": "gtools",
+  "outputfilename": "gtools",
+  "frontend:install": "npm install",
+  "frontend:build": "npm run build",
+  "frontend:dev:watcher": "npm run dev",
+  "frontend:dev:serverUrl": "auto",
+  "author": {
+    "name": "yizhitangtongxue",
+    "email": "yizhitangtongxue@gmail.com"
+  }
+}
