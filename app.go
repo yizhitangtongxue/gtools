@@ -36,7 +36,11 @@ func (a *App) Greet(name string) string {
 }
 
 func (a *App) GetProcessListByPortNumber(portNumber string) []CmdStruct {
-	fmt.Println("GetProcessListByPortNumber")
+	fmt.Println("GetProcessListByPortNumber portNumber",portNumber)
+
+	if portNumber == "" {
+		return []CmdStruct{}
+	}
 
 	cmd := exec.Command("lsof", "-i", "tcp:"+portNumber)
 	var out bytes.Buffer

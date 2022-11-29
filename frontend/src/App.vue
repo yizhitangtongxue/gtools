@@ -1,92 +1,87 @@
 <template>
-  <div class="mt-4 port-number-container" style="height: auto;border: none;">
-    <el-input v-model="portNumber" placeholder="请输入端口号查询相关进程" class="input-with-select" @keyup.enter.native="onSearch">
-      <template #append>
-        <el-button :icon="Search" @click="onSearch"/>
-      </template>
-    </el-input>
+  <div class="common-layout">
+    <el-container>
+      <!-- <el-aside width="200px"> -->
+      <el-aside width="auto">
+        <div class="main-menu">
+          <!-- <el-radio-group v-model="isCollapse" style="margin-bottom: 20px">
+            <el-radio-button :label="false">expand</el-radio-button>
+            <el-radio-button :label="true">collapse</el-radio-button>
+          </el-radio-group> -->
+          <el-menu class="el-menu-vertical-demo" router :collapse="isCollapse" @open="handleOpen" @close="handleClose">
+            <el-menu-item index="/">
+              <el-icon>
+                <location />
+              </el-icon>
+            </el-menu-item>
+            <el-menu-item index="/hello">
+              <el-icon>
+                <setting />
+              </el-icon>
+            </el-menu-item>
+          </el-menu>
+        </div>
+      </el-aside>
+      <el-main>
+        <router-view v-slot="{ Component }">
+          <!-- <transition name="fade"> -->
+          <keep-alive>
+            <component :is="Component" />
+          </keep-alive>
+          <!-- </transition> -->
+        </router-view>
+      </el-main>
+    </el-container>
   </div>
-  <el-table :data="tableData" border style="width: 100%;height:95%" empty-text="暂无数据">
-    <el-table-column prop="Pid" label="PID" width="100" />
-    <el-table-column prop="Command" label="程序名称" width="180">
-      <template #default="scope">
-        <span
-          v-if="scope.row.Command.indexOf('x81') > 0">未知程序</span>
-        <span v-else>{{ scope.row.Command }}</span>
-      </template>
-    </el-table-column>
-    <el-table-column prop="User" label="用户" />
-    <el-table-column prop="IpProtocol" label="IP协议" />
-    <el-table-column prop="Connection" label="连接" />
-    <el-table-column label="操作" width="120">
-      <template #default="scope">
-        <el-button @click="onKillProcess(scope.row)">
-          终止进程
-        </el-button>
-      </template>
-    </el-table-column>
-  </el-table>
+
+
 </template>
 
 <script setup>
-import { ElMessage, ElMessageBox } from 'element-plus'
-import { Search } from '@element-plus/icons-vue'
-import { ref, onMounted, reactive } from 'vue';
-import { GetProcessListByPortNumber, KillProcessByPortNumber } from '../wailsjs/go/main/App'
+import {
+  Document,
+  Menu as IconMenu,
+  Location,
+  Setting
+} from '@element-plus/icons-vue'
+import { ref, onMounted, reactive, watch } from 'vue';
+const isCollapse = ref(true)
 
-const portNumber = ref("8080")
-const tableData = ref()
 
-const onSearch = () => {
-  getProcessListByPortNumber()
+const handleOpen = (key, keyPath) => {
+  console.log(key, keyPath)
+}
+const handleClose = (key, keyPath) => {
+  console.log(key, keyPath)
 }
 
-const getProcessListByPortNumber = () => {
-  GetProcessListByPortNumber(portNumber.value).then(result => {
-
-    tableData.value = result
-
-  })
-}
-
-
-const onKillProcess = (row) => {
-  ElMessageBox.confirm('确认终止进程 ' + row.Command + ' 吗？', '提示', {
-    // if you want to disable its autofocus
-    // autofocus: false,
-    confirmButtonText: '确认',
-    cancelButtonText: "取消"
-  }).then(() => {
-    KillProcessByPortNumber(row.Pid).then(success => {
-      if (success) {
-        ElMessage({
-          type: "success",
-          message: "已终止"
-        })
-
-        onSearch()
-      } else {
-        ElMessage({
-          type: "warn",
-          message: "终止失败"
-        })
-      }
-    })
-
-  }).catch(() => {
-    ElMessage({
-      type: "info",
-      message: "已取消"
-    })
-  })
-}
 </script>
 
 
-<style>
-/* 去除端口号搜索框、放大镜搜索按钮的圆角边框 */
-.port-number-container .el-input__wrapper,
-.port-number-container .el-input-group__append {
-  border-radius: 0 !important;
+<style scoped>
+/* .main-menu {
+  height: 100vh;
+  min-height: 100vh;
+} */
+
+.main-menu>ul {
+  background-color: white;
+  border-right: none;
+  height: 100vh;
 }
+
+.el-main {
+  --el-main-padding: none;
+  min-height: 100vh;
+}
+
+/* .fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+} */
 </style>
