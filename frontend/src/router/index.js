@@ -10,11 +10,6 @@ const routers = [
     "path": "/hello",
     "name": "HelloWorld",
     "component": () => import("../components/HelloWorld.vue")
-  },
-  {
-    "path": "/mavendld",
-    "name": "MavenDld",
-    "component": () => import("../components/MavenDld.vue")
   }
 ]
 
