@@ -14,7 +14,7 @@
                 <location />
               </el-icon>
             </el-menu-item>
-            <el-menu-item index="/hello">
+            <el-menu-item index="/mavendld">
               <el-icon>
                 <setting />
               </el-icon>
